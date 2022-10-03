@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -24,7 +23,6 @@ export class CatController {
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async createCat(@Body() catRequest: CreateCatDto) {
-    console.log(catRequest);
     return this.catService.createCat(catRequest);
   }
 
@@ -36,22 +34,19 @@ export class CatController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  getOneCat(@Param('id', ParseIntPipe) id: number): Cat {
+  getOneCat(@Param('id') id: number): Promise<Cat> {
     return this.catService.findOneCat(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
-  updateCatById(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() catBody: UpdateCatDto,
-  ) {
+  updateCatById(@Param('id') id: number, @Body() catBody: UpdateCatDto) {
     return this.catService.updateCat(id, catBody);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  deleteOneCat(@Param('id', ParseIntPipe) id: number): void {
+  deleteOneCat(@Param('id') id: number): Promise<void> {
     return this.catService.deleteCat(id);
   }
 }

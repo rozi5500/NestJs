@@ -1,47 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cat } from './entities/cat.entity';
 import { CreateCatDto, UpdateCatDto } from './dto/request';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CatService {
-  private cats: Cat[] = [
-    {
-      id: 1,
-      age: 4,
-      name: 'Mikasa',
-      owners: ['Nick', 'Andrew'],
-    },
-    {
-      id: 2,
-      age: 1,
-      name: 'Dolhi',
-      owners: ['Hp, Valif'],
-    },
-    {
-      id: 3,
-      age: 6,
-      name: 'Vinga',
-      owners: ['Chop', 'Vjlink'],
-    },
-  ];
+  constructor(@InjectRepository(Cat) private catRepository: Repository<Cat>) {}
 
-  createCat(catRequest: CreateCatDto) {
-    this.cats.push(catRequest);
-    return this.findAllCats();
+  async createCat(catRequest: CreateCatDto): Promise<Cat> {
+    return this.catRepository.save(catRequest);
   }
 
-  findAllCats(queryOptions?): Cat[] {
-    return this.cats;
+  findAllCats(queryOptions?): Promise<Cat[]> {
+    return this.catRepository.find();
   }
 
-  findOneCat(id: number): Cat {
-    return this.cats.find((cat) => cat.id === id);
+  async findOneCat(id: number): Promise<Cat> {
+    const cat = await this.catRepository.findOne({ where: { id } });
+
+    if (!cat) throw new NotFoundException(`Cat #${id} is not found`);
+    return cat;
   }
 
-  updateCat(id: string, catBody: UpdateCatDto) {}
+  async updateCat(id: number, catBody: UpdateCatDto): Promise<Cat | Error> {
+    const cat = await this.catRepository.preload({
+      id,
+      ...catBody,
+    });
 
-  deleteCat(id: number): void {
-    const catIndex = this.cats.findIndex((cat) => cat.id === id);
-    this.cats.splice(catIndex, 1);
+    if (!cat) throw new NotFoundException(`Cat #${id} is not found`);
+
+    return this.catRepository.save(cat);
+  }
+
+  async deleteCat(id: number): Promise<void> {
+    await this.catRepository.delete(id);
   }
 }

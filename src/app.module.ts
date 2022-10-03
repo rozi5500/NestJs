@@ -14,7 +14,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       autoLoadEntities: true,
       logging: false,
-      entities: [__dirname + '/../**/entities/*.entity{.ts}'],
     }),
     CatModule,
   ],
