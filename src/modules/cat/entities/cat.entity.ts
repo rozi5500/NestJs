@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Owner } from './owner.entity';
 
 @Entity()
 export class Cat {
@@ -6,11 +13,20 @@ export class Cat {
   id: number;
 
   @Column()
-  name: string;
+  title: string;
+
+  @Column()
+  description: string;
 
   @Column()
   age: number;
 
-  @Column('json', { nullable: true })
-  owners: string[];
+  @Column({ default: 0 })
+  recommendations: number;
+
+  @JoinTable()
+  @ManyToMany((type) => Owner, (owner) => owner.cat, {
+    cascade: true, // For inserting data
+  })
+  owners: Owner[];
 }

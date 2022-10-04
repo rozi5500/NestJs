@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 dotenv.config();
 
 async function startServer() {
-  const PORT = process.env.PORT || 5001;
+  const PORT = process.env.PORT || 5000;
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
@@ -15,6 +15,9 @@ async function startServer() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

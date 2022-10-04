@@ -14,6 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CatService } from './cat.service';
 import { Cat } from './entities/cat.entity';
 import { UpdateCatDto, CreateCatDto } from './dto/request';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @ApiTags('cats')
 @Controller('cats')
@@ -28,7 +29,7 @@ export class CatController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAllCats(@Query() queryPagination): Promise<Cat[]> {
+  async getAllCats(@Query() queryPagination: PaginationDto): Promise<Cat[]> {
     return this.catService.findAllCats(queryPagination);
   }
 
