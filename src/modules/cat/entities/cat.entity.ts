@@ -13,10 +13,7 @@ export class Cat {
   id: number;
 
   @Column()
-  title: string;
-
-  @Column()
-  description: string;
+  name: string;
 
   @Column()
   age: number;
@@ -25,7 +22,7 @@ export class Cat {
   recommendations: number;
 
   @JoinTable()
-  @ManyToMany((type) => Owner, (owner) => owner.cat, {
+  @ManyToMany(() => Owner, (owner) => owner.cat, {
     cascade: true, // For inserting data
   })
   owners: Owner[];

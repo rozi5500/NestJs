@@ -9,6 +9,6 @@ export class Owner {
   @Column()
   name: string;
 
-  @ManyToMany((type) => Cat, (cat) => cat.owners)
+  @ManyToMany(() => Cat, (cat) => cat.owners)
   cat: Cat[];
 }
