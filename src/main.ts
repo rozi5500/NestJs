@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ async function startServer() {
     }),
   );
 
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   const config = new DocumentBuilder()
     .setTitle('Nick study project Open API')
     .setDescription('The documentation for study project')
@@ -28,10 +31,11 @@ async function startServer() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   await app.listen(PORT, () =>
     console.log(`Server is running on ${PORT} port`),
   );
 }
+
 startServer();

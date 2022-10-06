@@ -6,6 +6,7 @@ import { Connection, Repository } from 'typeorm';
 import { Owner } from './entities/owner.entity';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { Event } from '../events/entities/event.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CatService {
@@ -13,7 +14,10 @@ export class CatService {
     @InjectRepository(Cat) private catRepository: Repository<Cat>,
     @InjectRepository(Owner) private personRepository: Repository<Owner>,
     private connection: Connection,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    const dbHost = this.configService.get('DB_HOST', 'localhost');
+  }
 
   async createCat(catRequest: CreateCatDto): Promise<Cat> {
     const owners = await Promise.all(

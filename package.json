@@ -25,6 +25,7 @@
     "migration:revert": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:revert -d src/config/typeorm.config-migrations.ts"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -50,6 +51,7 @@
     "@types/jest": "28.1.8",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
+    "@types/hapi__joi": "^17.1.8",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
