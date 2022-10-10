@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { ResponseWrapperInterceptor } from './common/interceptors/response-wrapper.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 dotenv.config();
 
@@ -23,6 +25,10 @@ async function startServer() {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(
+    new ResponseWrapperInterceptor(),
+    new TimeoutInterceptor(),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Nick study project Open API')
