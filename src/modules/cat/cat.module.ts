@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
 import { CatController } from './cat.controller';
 import { CatService } from './cat.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cat } from './entities/cat.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Cat, CatSchema } from './models/cat.schema';
+import { Owner, OwnerSchema } from './models/owner.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Cat])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Cat.name, schema: CatSchema },
+      { name: Owner.name, schema: OwnerSchema },
+    ]),
+  ],
   controllers: [CatController],
   providers: [CatService],
   exports: [CatService],

@@ -1,22 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CatModule } from './modules/cat/cat.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      port: parseInt(process.env.DB_PORT),
-      host: process.env.DB_HOST,
-      username: 'postgres',
-      password: 'root',
-      database: process.env.DB_NAME,
-      synchronize: true,
-      autoLoadEntities: true,
-      logging: false,
-      entities: [__dirname + '/../**/entities/*.entity{.ts}'],
-    }),
-    CatModule,
-  ],
+  imports: [MongooseModule.forRoot('mongodb://localhost:27017'), CatModule],
 })
 export class AppModule {}

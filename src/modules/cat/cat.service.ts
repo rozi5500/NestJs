@@ -1,47 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from './entities/cat.entity';
 import { CreateCatDto, UpdateCatDto } from './dto/request';
+import { InjectModel } from '@nestjs/mongoose';
+import { Cat, CatDocument } from './models/cat.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CatService {
-  private cats: Cat[] = [
-    {
-      id: 1,
-      age: 4,
-      name: 'Mikasa',
-      owners: ['Nick', 'Andrew'],
-    },
-    {
-      id: 2,
-      age: 1,
-      name: 'Dolhi',
-      owners: ['Hp, Valif'],
-    },
-    {
-      id: 3,
-      age: 6,
-      name: 'Vinga',
-      owners: ['Chop', 'Vjlink'],
-    },
-  ];
+  constructor(@InjectModel(Cat.name) private catModel: Model<CatDocument>) {}
 
-  createCat(catRequest: CreateCatDto) {
-    this.cats.push(catRequest);
-    return this.findAllCats();
+  async createCat(catRequest: CreateCatDto): Promise<Cat> {
+    return this.catModel.create(catRequest);
   }
 
-  findAllCats(queryOptions?): Cat[] {
-    return this.cats;
+  async findAllCats(): Promise<Cat[]> {
+    return this.catModel.find();
   }
 
-  findOneCat(id: number): Cat {
-    return this.cats.find((cat) => cat.id === id);
-  }
+  findOneCat(id: number) {}
 
   updateCat(id: string, catBody: UpdateCatDto) {}
 
-  deleteCat(id: number): void {
-    const catIndex = this.cats.findIndex((cat) => cat.id === id);
-    this.cats.splice(catIndex, 1);
-  }
+  deleteCat(id: number): void {}
 }
